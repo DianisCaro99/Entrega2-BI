@@ -3,17 +3,15 @@ from flask_cors import CORS
 from joblib import load
 from sklearn.base import BaseEstimator, TransformerMixin
 import inflect
-import re, string, unicodedata
+import re, unicodedata
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk import word_tokenize
 import contractions
 import pandas as pd
-from models.PreparationTransformer import Model as PreparationTransformer
+import models.PreparationTransformer as PreparationTransformer
 from models.SvcModel import Model as SVCModel
-
-
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -125,7 +123,7 @@ class NormalizacionTransformer(BaseEstimator,TransformerMixin):
         X_['words'] = X_['words'].apply(lambda x: ' '.join(map(str, x)))
         return X_
 
-pipe1 = load("assets/pipeline1.joblib")
+pipe1 = PreparationTransformer()
 vectorizer = load('assets/vectorizer.joblib')
 model = load("assets/svcmodel.joblib")
 
@@ -134,7 +132,7 @@ def read_root():
    return "Entrega 2 - Grupo 5: Automatización analítica de textos"
 
 @app.route("/api/prediction", methods=["GET"])
-def make_predictions_r():
+def make_predictions():
     data = request.get_data().decode('utf-8')
     df = pd.read_json(data)
 
