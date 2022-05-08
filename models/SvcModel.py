@@ -1,7 +1,7 @@
 from joblib import load
 
 class Model:
-    def __init__(self, columns):
+    def __init__(self):
         self.model = load("assets/svcmodel.joblib")
 
     def predict(self, data):
