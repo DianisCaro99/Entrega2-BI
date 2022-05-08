@@ -4,7 +4,7 @@ from flask_cors import CORS
 from joblib import load
 from sklearn.base import BaseEstimator, TransformerMixin
 import inflect
-import re, string, unicodedata
+import re, unicodedata
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
@@ -129,7 +129,7 @@ class NormalizacionTransformer(BaseEstimator,TransformerMixin):
 
 pipe1 =  load("assets/pipeline1.joblib")
 vectorizer = load('assets/vectorizer.joblib')
-model = SVCModel()
+model = load("assets/svcmodel.joblib")
 
 @app.get("/api")
 def read_root():
