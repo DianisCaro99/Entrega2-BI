@@ -1,7 +1,7 @@
 from joblib import load
 
 class Model:
-    def __init__(self, columns):
+    def __init__(self):
         self.model = load("assets/pipeline1.joblib")
 
     def transform(self, data):
