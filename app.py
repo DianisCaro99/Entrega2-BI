@@ -13,7 +13,7 @@ import contractions
 import pandas as pd
 from models.SvcModel import Model as SVCModel
 
-app = Flask(_name_)
+app = Flask(__name__)
 cors = CORS(app)
 nltk.download('punkt')
 nltk.download('stopwords')
