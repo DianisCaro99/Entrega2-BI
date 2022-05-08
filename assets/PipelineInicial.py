@@ -1,31 +1,28 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from joblib import load
-from sklearn.base import BaseEstimator, TransformerMixin
-import inflect
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns; sns.set()  # for plot styling
+
 import re, unicodedata
+import contractions
+import inflect
+from sklearn.base import BaseEstimator, TransformerMixin
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk import word_tokenize
-import contractions
-import pandas as pd
-from assets import PipelineInicial # decided to save it in a utils directory
 
-
-
-app = Flask(__name__)
-cors = CORS(app)
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('omw-1.4')
 
 class LimpiezaTransformer(BaseEstimator,TransformerMixin):
-    def _init_(self):
+    def __init__(self):
         pass
     def fit(self, X, y=None):
         return self
+    def limpiar_label(self,value):
+        if value=='__label__0':
+            return 0
+        else:
+            return 1
     
     def limpiar_study(self,value):
         return value.replace('study interventions are ', '')
@@ -83,20 +80,21 @@ class LimpiezaTransformer(BaseEstimator,TransformerMixin):
         words = self.remove_non_ascii(words)
         words = self.remove_stopwords(words)
         return words
-
+        
     def transform(self, X, y=None):
         X_ = X.copy()
         X_add = X_["study_and_condition"].str.split('.', 1, expand=True)
         X_add.columns = ['study', 'condition']
         X_ = pd.concat([X_, X_add], axis=1)
         X_.drop('study_and_condition', axis=1, inplace=True)
+        X_['label'] = X_['label'].map(self.limpiar_label)
         X_['study'] = X_['study'].map(self.limpiar_study)
         X_['condition'] = X_['condition'].apply(contractions.fix) #Aplica la corrección de las contracciones
         X_['words'] = X_['condition'].apply(word_tokenize).apply(self.preprocessing) #Aplica la eliminación del ruido
         return X_
 
 class NormalizacionTransformer(BaseEstimator,TransformerMixin):
-    def _init_(self):
+    def __init__(self):
         pass
     def fit(self, X, y=None):
         return self
@@ -128,29 +126,3 @@ class NormalizacionTransformer(BaseEstimator,TransformerMixin):
         X_['words'] = X_['words'].apply(self.stem_and_lemmatize) #Aplica lematización y Eliminación de Prefijos y Sufijos.
         X_['words'] = X_['words'].apply(lambda x: ' '.join(map(str, x)))
         return X_
-
-pipe1 = load("assets/pipeline1.pkld")
-vectorizer = load('assets/vectorizer.joblib')
-model = load("assets/svcmodel.joblib")
-
-@app.get("/api")
-def read_root():
-   return "Entrega 2 - Grupo 5: Automatización analítica de textos"
-
-@app.route("/api/prediction", methods=["GET"])
-def make_predictions_r():
-    data = request.get_data().decode('utf-8')
-    df = pd.read_json(data)
-    registrotrans = pipe1.transform(df)
-    registrotrans = vectorizer.transform(registrotrans['words'])
-    prediction = model.predict(registrotrans)[0]
-    proba = model.predict_proba(registrotrans)[0]
-    if prediction:
-        proba = round(proba[1],3)
-    else:
-        proba = round(proba[0],3)
-
-    return jsonify(response=['Eligible' if prediction == 1 else 'Not eligible',proba])
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
