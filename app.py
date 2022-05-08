@@ -9,7 +9,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk import word_tokenize
-import contractions
+#import contractions
 import pandas as pd
 from models.SvcModel import Model as SVCModel
 
@@ -150,5 +150,5 @@ def make_predictions_r():
 
     return jsonify(response=['Eligible' if prediction == 1 else 'Not eligible',proba])
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000, debug=True)
