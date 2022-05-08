@@ -1,6 +1,6 @@
 from joblib import load
 
-class Model:
+class PreparationTransformer:
     def __init__(self):
         self.model = load("assets/pipeline1.joblib")
 
