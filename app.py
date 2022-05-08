@@ -11,7 +11,7 @@ from nltk import word_tokenize
 import contractions
 import pandas as pd
 
-import models.SvcModel as SVCModel
+from models.SvcModel import Model as SVCModel
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -89,6 +89,8 @@ class LimpiezaTransformer(BaseEstimator,TransformerMixin):
         X_['words'] = X_['condition'].apply(word_tokenize).apply(self.preprocessing) #Aplica la eliminación del ruido
         return X_
 
+pipe1 = load('assets/pipeline1.joblib')
+
 class NormalizacionTransformer(BaseEstimator,TransformerMixin):
     def __init__(self):
         pass
@@ -123,9 +125,8 @@ class NormalizacionTransformer(BaseEstimator,TransformerMixin):
         X_['words'] = X_['words'].apply(lambda x: ' '.join(map(str, x)))
         return X_
 
-pipe1 = load('assets/pipeline1.joblib')
 vectorizer = load('assets/vectorizer.joblib')
-model = SVCModel()
+model = load("assets/svcmodel.joblib")
 
 @app.get("/api")
 def read_root():
