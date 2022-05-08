@@ -10,8 +10,9 @@ from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk import word_tokenize
 import contractions
 import pandas as pd
-import models.PreparationTransformer as PreparationTransformer
-import models.SvcModel as SvcModel
+from models.PreparationTransformer import Model as PreparationTransformer
+from models.SvcModel import Model as SVCModel
+
 
 
 app = Flask(__name__)
