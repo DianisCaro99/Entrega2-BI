@@ -125,7 +125,7 @@ class NormalizacionTransformer(BaseEstimator,TransformerMixin):
         X_['words'] = X_['words'].apply(lambda x: ' '.join(map(str, x)))
         return X_
 
-pipe1 = PreparationTransformer()
+pipe1 = load("assets/pipeline1.joblib")
 vectorizer = load('assets/vectorizer.joblib')
 model = load("assets/svcmodel.joblib")
 
