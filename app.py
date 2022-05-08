@@ -125,7 +125,7 @@ class NormalizacionTransformer(BaseEstimator,TransformerMixin):
 
 vectorizer = load('assets/vectorizer.joblib')
 model = load("assets/svcmodel.joblib")
-pipe1 = PreparationTransformer()
+pipe1 = Model()
 
 @app.get("/api")
 def read_root():
