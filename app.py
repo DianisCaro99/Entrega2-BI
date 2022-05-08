@@ -11,7 +11,8 @@ from nltk import word_tokenize
 import contractions
 import pandas as pd
 import models.PreparationTransformer as PreparationTransformer
-from models.SvcModel import Model as SVCModel
+import models.SvcModel as SvcModel
+
 
 app = Flask(__name__)
 cors = CORS(app)
