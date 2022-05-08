@@ -9,7 +9,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk import word_tokenize
-#import contractions
+import contractions
 import pandas as pd
 from models.SvcModel import Model as SVCModel
 
