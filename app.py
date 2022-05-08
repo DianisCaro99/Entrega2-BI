@@ -10,7 +10,7 @@ from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk import word_tokenize
 import contractions
 import pandas as pd
-import models.PreparationTransformer
+from models.PreparationTransformer import PreparationTransformer
 from models.SvcModel import Model
 
 app = Flask(__name__)
@@ -124,7 +124,7 @@ class NormalizacionTransformer(BaseEstimator,TransformerMixin):
         return X_
 
 vectorizer = load('assets/vectorizer.joblib')
-model = load("assets/svcmodel.joblib")
+model = PreparationTransformer()
 pipe1 = Model()
 
 @app.get("/api")
