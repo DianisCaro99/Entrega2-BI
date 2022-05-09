@@ -5,15 +5,16 @@ from sklearn.base import BaseEstimator, TransformerMixin
 import inflect
 import re, unicodedata
 import nltk
-from nltk.corpus import stopwords
-from nltk.stem import LancasterStemmer, WordNetLemmatizer
-from nltk import word_tokenize
-import contractions
 import pandas as pd
 import PipelineInicial
 
 app = Flask(__name__)
 cors = CORS(app)
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
 
 pipe1 = load("assets/pipeline.pkld")
 vectorizer = load('assets/vectorizer.joblib')
