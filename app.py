@@ -1,9 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from joblib import load
-from sklearn.base import BaseEstimator, TransformerMixin
-import inflect
-import re, unicodedata
 import nltk
 import pandas as pd
 import PipelineInicial
