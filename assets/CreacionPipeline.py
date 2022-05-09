@@ -1,4 +1,4 @@
-from sklearn.externals import joblib
+import joblib
 from sklearn.pipeline import Pipeline
 from PipelineInicial import LimpiezaTransformer
 from PipelineInicial import NormalizacionTransformer
