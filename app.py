@@ -21,7 +21,7 @@ model = load("assets/svcmodel.joblib")
 def read_root():
    return "Entrega 2 - Grupo 5: Automatización analítica de textos"
 
-@app.route("/api/prediction", methods=["GET"])
+@app.route("/api/prediction", methods=["POST"])
 def make_predictions_r():
     data = request.get_data().decode('utf-8')
     df = pd.read_json(data)
