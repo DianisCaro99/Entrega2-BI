@@ -10,16 +10,12 @@ from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk import word_tokenize
 import contractions
 import pandas as pd
-from assets import PipelineInicial # decided to save it in a utils directory
-
-
+import PipelineInicial
 
 app = Flask(__name__)
 cors = CORS(app)
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('omw-1.4')
+
+
 
 class LimpiezaTransformer(BaseEstimator,TransformerMixin):
     def _init_(self):
