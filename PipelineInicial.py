@@ -12,17 +12,11 @@ from nltk.corpus import stopwords
 from nltk.stem import LancasterStemmer, WordNetLemmatizer
 from nltk import word_tokenize
 
-
 class LimpiezaTransformer(BaseEstimator,TransformerMixin):
-    def __init__(self):
+    def _init_(self):
         pass
     def fit(self, X, y=None):
         return self
-    def limpiar_label(self,value):
-        if value=='__label__0':
-            return 0
-        else:
-            return 1
     
     def limpiar_study(self,value):
         return value.replace('study interventions are ', '')
@@ -80,21 +74,20 @@ class LimpiezaTransformer(BaseEstimator,TransformerMixin):
         words = self.remove_non_ascii(words)
         words = self.remove_stopwords(words)
         return words
-        
+
     def transform(self, X, y=None):
         X_ = X.copy()
         X_add = X_["study_and_condition"].str.split('.', 1, expand=True)
         X_add.columns = ['study', 'condition']
         X_ = pd.concat([X_, X_add], axis=1)
         X_.drop('study_and_condition', axis=1, inplace=True)
-        X_['label'] = X_['label'].map(self.limpiar_label)
         X_['study'] = X_['study'].map(self.limpiar_study)
         X_['condition'] = X_['condition'].apply(contractions.fix) #Aplica la corrección de las contracciones
         X_['words'] = X_['condition'].apply(word_tokenize).apply(self.preprocessing) #Aplica la eliminación del ruido
         return X_
 
 class NormalizacionTransformer(BaseEstimator,TransformerMixin):
-    def __init__(self):
+    def _init_(self):
         pass
     def fit(self, X, y=None):
         return self
